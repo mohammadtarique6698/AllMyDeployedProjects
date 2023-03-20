@@ -46,15 +46,15 @@ footer {
     background-size: auto auto;
     background-position: center center;
   }
+  footer {
+    position: fixed;
+    bottom: 0;
+  }
 }
 @media screen and (max-width: 575px) {
   body {
     text-align: center;
     height: auto;
-  }
-  footer {
-    position: fixed;
-    bottom: 0;
   }
 }
 @media screen and (max-width: 767px) {
