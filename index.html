@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sono:wght@500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Kanit&family=Merriweather+Sans:ital@0;1&family=Sono:wght@500&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Sono:wght@500&display=swap" rel="stylesheet">
+  <title>My Weather Web Page with API</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="#"><strong>Weather Teller</strong></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse my-2" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"><strong>Home</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">About (in development)</a>
+          </li>
+          <li class="nav-item dropdown mx-2 rounded-3">
+            <a class="nav-link dropdown-toggle btn btn-primary btn-sm text-white" href="#" id="navbarDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Contact Me
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="tel:+918109297598">Through Phone</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="mailto:mohammadtarique661998@gmail.com">Through Mail</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="https://www.linkedin.com/in/itstarique6698/">Through Linkedln</a></li>
+            </ul>
+          <li class="nav-item">
+            <a class="nav-link btn btn-primary btn-sm text-white rounded-3" href="#">Sign In</a>
+          </li>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-5 col-sm-6 col-lg-5 col-xl-5">
+        <h2 class="text-white my-4">Welcome to My Weather web page!!</h2>
+        <div class="divider py-1 bg-primary"></div>
+        <p class="align-content-center align-items-center">
+        <h4 class="text-white">Your ultimate source for accurate and up-to-date weather information. Our user-friendly
+          interface and comprehensive data will help you make informed decisions about your daily activities. Explore
+          our
+          interactive map, read our news and articles, and stay ahead of the weather with us.</h4>
+        </p>
+      </div>
+
+      <div class="col-md-7 col-sm-6 col-lg-7 col-xl-7">
+        <div class="my-4 border rounded restyle">
+          <div class="m-3">
+            <h3><strong>Welcome to the Forecast</strong></h1>
+              <form class="py-2 d-flex justify-content-between" id="search-form">
+                <input type="search" class="form-control me-1 p-2" id="search" name="Search"
+                  placeholder="Search for a city">
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+              </form>
+              <div id="inputDataHere">
+                <!-- here i wll add my data from api from myweather.org site-->
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <footer>
+    <div class="container">Developed by ©Mohammad Tarique</div>
+  </footer>
+
+  <script>
+    let form = document.getElementById("search-form")
+    let weatherData = document.getElementById("inputDataHere");
+
+    function fetchWeatherData(city) {
+      const API_KEY = "974d6dec855cf5ce5be232b16d2d8084";
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+      return fetch(apiUrl).then((response) => response.json())
+    }
+    function renderWeatherData(data) {
+      //object destructuring, first i saw the data, its basically array of objects
+      let { name, dt, coord: { lon, lat }, main: { temp, feels_like, humidity }, wind: { speed }, weather: [{ main, description, icon }] } = data;
+
+      const weatherIconUrl = `http://openweathermap.org/img/wn/${icon}.png`;
+      weatherData.style.color = "black";
+
+      //a new way of writing HTML inside javascript
+      let weatherDataHtml = `
+                <h3><strong>${name}</strong><img src="${weatherIconUrl}" alt="${description}"><h4>
+                <p class="fs-6">coordinates -> latitude: ${lat}, longitude: ${lon}</p>
+                <p class="fs-6">Temperature: ${temp}°C</p>
+                <p class="fs-6">Feels like: ${feels_like}°C</p>
+                <p class="fs-6">Humidity: ${humidity}%</p>
+                <p class="fs-6">Wind Speed: ${speed}m/s</p>
+                <p class="fs-6">Weather Status: ${main}, ${description}</p>
+                `;
+      weatherData.innerHTML = weatherDataHtml;
+    }
+    function init() {
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const city = document.getElementById("search").value;
+
+        fetchWeatherData(city)
+          .then((info) => renderWeatherData(info))
+        //(.then(renderWeatherData))
+      });
+    }
+    init();
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
